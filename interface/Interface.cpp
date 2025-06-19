@@ -23,26 +23,41 @@ int32_t Interface::getProgress() {
 }
 
 void Interface::buildFileMap(const char* fileDirectory) {
-	availableFiles = getFilesFromDirectory(fileDirectory, ".bin");
+        availableFiles = getFilesFromDirectory(fileDirectory, ".bin");
+        std::vector<std::string> mpkFiles = getFilesFromDirectory(fileDirectory, ".mpk");
+        availableFiles.insert(availableFiles.end(), mpkFiles.begin(), mpkFiles.end());
 
-	for (int i = 0; i < availableFiles.size(); i++) {
-		ArchiveBin decimaArchive(availableFiles[i].c_str());
-		decimaArchive.setMessageHandler(this);
-		if (!decimaArchive.open()) continue;
+        for (int i = 0; i < availableFiles.size(); i++) {
+                std::string ext = getFileExtension(availableFiles[i]);
 
-		std::vector <BinFileEntry> fileTable = decimaArchive.getFileTable();
+                if (ext == "mpk") {
+                        ArchiveMoviePack moviePack(availableFiles[i].c_str());
+                        moviePack.setMessageHandler(this);
+                        if (!moviePack.open()) continue;
 
-		for (int j = 0; j < fileTable.size(); j++) {
-			fileMap[fileTable[j].hash] = availableFiles[i].c_str();
-		}
-	}
+                        auto fileTable = moviePack.getFileTable();
+                        for (int j = 0; j < fileTable.size(); j++) {
+                                fileMap[fileTable[j].hash] = availableFiles[i].c_str();
+                        }
+                } else {
+                        ArchiveBin decimaArchive(availableFiles[i].c_str());
+                        decimaArchive.setMessageHandler(this);
+                        if (!decimaArchive.open()) continue;
+
+                        std::vector <BinFileEntry> fileTable = decimaArchive.getFileTable();
+
+                        for (int j = 0; j < fileTable.size(); j++) {
+                                fileMap[fileTable[j].hash] = availableFiles[i].c_str();
+                        }
+                }
+        }
 }
 
-const char* Interface::getContainingBinFile(const char* filename) {
-	std::string fname = filename;
-	if (!hasExtension(fname)) addExtension(fname, "core");
-	uint64_t hash = getFileHash(fname);
-	return fileMap[hash];
+const char* Interface::getContainingArchiveFile(const char* filename) {
+        std::string fname = filename;
+        if (!hasExtension(fname)) addExtension(fname, "core");
+        uint64_t hash = getFileHash(fname);
+        return fileMap[hash];
 }
 
 //TODO make dedicated thread handler class
@@ -87,22 +102,19 @@ void Interface::setupOutput(const std::string& output) {
 }
 
 void Interface::directoryExtract(const char* filename, std::string output) {
-	const char* binFile = getContainingBinFile(filename);
+       const char* binFile = getContainingArchiveFile(filename);
 	if (binFile == NULL) return;
 	setupOutput(output);
 	extract(binFile, filename, output.c_str());
 }
 
 void Interface::batchExtract(const std::vector<char*>& filenames, std::string output, int batchSize, int batchOffset) {
-	int step = batchSize < 10 ? 1 : batchSize / 10;
-
-	for (int i = batchOffset; i < batchSize + batchOffset; i++) {
-		std::string newOutput = addFileToPath(filenames[i], output);
-		directoryExtract(filenames[i], newOutput);
-		if ((i - batchOffset) % step == 0) updateProgress(step);
-		if (this->forceQuit) return;
-	}
-	if (step != 1) updateProgress(batchSize % 10);
+        for (int i = batchOffset; i < batchSize + batchOffset; i++) {
+                std::string newOutput = addFileToPath(filenames[i], output);
+                directoryExtract(filenames[i], newOutput);
+                updateProgress(1);
+                if (this->forceQuit) return;
+        }
 }
 
 int Interface::initPrefetch(const char* binFile) {
@@ -120,19 +132,19 @@ void Interface::deinitPrefetch() {
 }
 
 DecimaArchive* archiveFactory(const char* archiveFile) {
-	const char* ext = getFileExtension(archiveFile).c_str();
-	if (ext == "mpk") {
-		return new ArchiveMoviePack(archiveFile);
-	}
+        std::string ext = getFileExtension(archiveFile);
+        if (ext == "mpk") {
+                return new ArchiveMoviePack(archiveFile);
+        }
 
 	return new ArchiveBin(archiveFile);
 }
 
 void destroyArchive(DecimaArchive* archive, const char* archiveFile) {
-	const char* ext = getFileExtension(archiveFile).c_str();
-	if (ext == "mpk") {
-		return delete (ArchiveMoviePack*)archive;
-	}
+        std::string ext = getFileExtension(archiveFile);
+        if (ext == "mpk") {
+                return delete (ArchiveMoviePack*)archive;
+        }
 
 	return delete (ArchiveBin*)archive;
 }

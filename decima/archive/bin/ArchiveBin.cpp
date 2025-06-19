@@ -586,3 +586,4 @@ DataBuffer ArchiveBin::extractFile(std::string filename) {
 	data = extract(fileTable[i]);
 	return data;
 }
+
