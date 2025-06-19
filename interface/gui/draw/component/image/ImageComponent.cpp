@@ -65,3 +65,4 @@ void ImageComponent::setCaller(ImageCaller* caller) {
 void ImageComponent::rightClicked(int mouseX, int mouseY) {
 	int dummy = 0;
 }
+
