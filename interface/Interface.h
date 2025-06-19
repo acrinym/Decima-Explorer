@@ -9,7 +9,7 @@
 #include "../decima/archive/mpk/ArchiveMoviePack.h"
 #include "../decima/archive/bin/initial/BinInitial.h"
 #include "../utils/Arrayutils.h"
-#include "../utils/NumUtils.h"
+#include "../utils/Numutils.h"
 #include "../utils/Msgutils.h"
 
 class Interface : public MessageHandler {
@@ -36,10 +36,10 @@ protected:
 	void updateProgress(int count);
 	int initPrefetch(const char* binFile);
 	void setupOutput(const std::string& output);
-	void buildFileMap(const char* fileDirectory);
-	void swap(const char* dataDir, const char* swapFile);
-	const char* getContainingBinFile(const char* filename);
-	std::vector<std::string> getFiles(const std::string& directory);
+        void buildFileMap(const char* fileDirectory);
+        void swap(const char* dataDir, const char* swapFile);
+        const char* getContainingArchiveFile(const char* filename);
+        std::vector<std::string> getFiles(const std::string& directory);
 	void directoryExtract(const char* filename, std::string output);
 	int extract(const char* archiveFile, int id, const char* output);
 	int extract(const char* archiveFile, const char* input, const char* output);
