@@ -1,7 +1,7 @@
 #pragma once
 #include "../Component.h"
-#include <shlobj_core.h>
-#include <shobjidl_core.h>
+#include <shlobj.h>
+#include <shobjidl.h>
 struct FileFilter {
 	const wchar_t* name;
 	const wchar_t* ext;

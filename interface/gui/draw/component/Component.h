@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <Windows.h>
-#include <Commctrl.h>
+#include <windows.h>
+#include <commctrl.h>
+#include <cstdint>
 
 struct Origin {
 	LONG x;

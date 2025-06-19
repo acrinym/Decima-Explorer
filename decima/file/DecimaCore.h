@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include "../../utils/Fileutils.h"
+#include <cstdint>
 
 typedef std::vector<uint8_t> DataBuffer;
 

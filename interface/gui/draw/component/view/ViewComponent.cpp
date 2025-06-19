@@ -1,5 +1,5 @@
 #include "ViewComponent.h"
-#include "..\file\FileComponent.h"
+#include "../file/FileComponent.h"
 
 ViewComponent::ViewComponent() {
 	setType(VIEW);

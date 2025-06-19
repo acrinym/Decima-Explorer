@@ -1,4 +1,5 @@
 #include "Interface.h"
+#include <chrono>
 
 Interface::Interface() {
 	progressMutex = new std::mutex();
@@ -82,15 +83,15 @@ void Interface::parallelExtract(const std::string& directory, const std::vector<
 		if (i < excess) add++;
 	}
 
-	int x = 0;
-	for (int i = 0; i < futures.size(); i++) {
-		while (!futures[i]._Is_ready()) {
-			if (x % 10000 == 0) intervalUpdate();
-			update();
-			x++;
-		}
-		intervalUpdate();
-	}
+        int x = 0;
+        for (size_t i = 0; i < futures.size(); i++) {
+                while (futures[i].wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) {
+                        if (x % 10000 == 0) intervalUpdate();
+                        update();
+                        x++;
+                }
+                intervalUpdate();
+        }
 
 	if (this->forceQuit) exit();
 }
