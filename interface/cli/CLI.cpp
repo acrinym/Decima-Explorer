@@ -1,4 +1,7 @@
 #include "CLI.h"
+#include <thread>
+#include <atomic>
+#include <chrono>
 
 
 CLI::CLI(int argc, char **argv) {
@@ -46,33 +49,64 @@ void CLI::cliExtract() {
 }
 
 void CLI::fileExtract() {
-	std::string output = argc == 5 ? argv[4] : argv[3];
-	setupOutput(output);
+        updateProgress(-getProgress());
+        std::string output = argc == 5 ? argv[4] : argv[3];
+        setupOutput(output);
 
-	if (isNumber(argv[3])) {
-		int id = argToNumber(argv[3]);
-		int ret = extract(argv[2], id, output.c_str());
-		if (!ret) return;
-	} else {
-		int ret = extract(argv[2], argv[3], output.c_str());
-		if (!ret) return;
-	}
+        std::atomic<bool> done(false);
+        std::thread progressThread([this, &done]() {
+                while (!done) {
+                        std::cout << "\rProgress: " << getProgress() << "/1" << std::flush;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                }
+                std::cout << "\rProgress: " << getProgress() << "/1" << std::endl;
+        });
 
-	std::string message = "finished extracting file " + output;
-	showMessage(message.c_str());
+        bool success = true;
+        if (isNumber(argv[3])) {
+                int id = argToNumber(argv[3]);
+                int ret = extract(argv[2], id, output.c_str());
+                if (!ret) success = false;
+        } else {
+                int ret = extract(argv[2], argv[3], output.c_str());
+                if (!ret) success = false;
+        }
+
+        if (success) updateProgress(1);
+        done = true;
+        progressThread.join();
+
+        if (!success) return;
+
+        std::string message = "finished extracting file " + output;
+        showMessage(message.c_str());
 }
 
 void CLI::dirExtract() {
-	buildFileMap(argv[2]);
+        updateProgress(-getProgress());
+        buildFileMap(argv[2]);
 
-	if (isNumber(argv[3])) {
-		showError("IDs cannot be used with directory extract");
-		return;
-	}
+        if (isNumber(argv[3])) {
+                showError("IDs cannot be used with directory extract");
+                return;
+        }
 
-	std::string output = argc == 5 ? argv[4] : argv[3];
-	directoryExtract(argv[3], output);
-	showMessage("extraction finished");
+        std::string output = argc == 5 ? argv[4] : argv[3];
+
+        std::atomic<bool> done(false);
+        std::thread progressThread([this, &done]() {
+                while (!done) {
+                        std::cout << "\rProgress: " << getProgress() << "/1" << std::flush;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                }
+                std::cout << "\rProgress: " << getProgress() << "/1" << std::endl;
+        });
+
+        directoryExtract(argv[3], output);
+        updateProgress(1);
+        done = true;
+        progressThread.join();
+        showMessage("extraction finished");
 }
 
 void CLI::list() {

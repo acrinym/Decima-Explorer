@@ -44,3 +44,4 @@ public:
        int extractFile(std::string filename, std::string output, bool suppressError = 0);
        const std::vector<ArchiveMoviePackFileEntry>& getFileTable() { return fileTable; }
 };
+

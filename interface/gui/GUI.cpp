@@ -256,10 +256,11 @@ void GUI::saveDirectoryChosen(std::string directory) {
 #endif
 
 HICON GUI::fetchIcon(const unsigned char* buffer, int bufferSize, int iconSize, int width, int height) {
-	unsigned char* icon = new unsigned char[iconSize];
-	int res = Kraken_Decompress(buffer, bufferSize, icon, iconSize);
-	return CreateIconFromResourceEx((PBYTE)icon, iconSize, TRUE, 0x30000, width, height, LR_DEFAULTSIZE | LR_DEFAULTCOLOR | LR_SHARED);
-	delete[] icon;
+        unsigned char* icon = new unsigned char[iconSize];
+        int res = Kraken_Decompress(buffer, bufferSize, icon, iconSize);
+        HICON hIcon = CreateIconFromResourceEx((PBYTE)icon, iconSize, TRUE, 0x30000, width, height, LR_DEFAULTSIZE | LR_DEFAULTCOLOR | LR_SHARED);
+        delete[] icon;
+        return hIcon;
 }
 
 void GUI::disableElements() {
