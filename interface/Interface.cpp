@@ -93,15 +93,12 @@ void Interface::directoryExtract(const char* filename, std::string output) {
 }
 
 void Interface::batchExtract(const std::vector<char*>& filenames, std::string output, int batchSize, int batchOffset) {
-	int step = batchSize < 10 ? 1 : batchSize / 10;
-
-	for (int i = batchOffset; i < batchSize + batchOffset; i++) {
-		std::string newOutput = addFileToPath(filenames[i], output);
-		directoryExtract(filenames[i], newOutput);
-		if ((i - batchOffset) % step == 0) updateProgress(step);
-		if (this->forceQuit) return;
-	}
-	if (step != 1) updateProgress(batchSize % 10);
+        for (int i = batchOffset; i < batchSize + batchOffset; i++) {
+                std::string newOutput = addFileToPath(filenames[i], output);
+                directoryExtract(filenames[i], newOutput);
+                updateProgress(1);
+                if (this->forceQuit) return;
+        }
 }
 
 int Interface::initPrefetch(const char* binFile) {
