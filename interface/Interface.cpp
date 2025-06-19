@@ -131,19 +131,19 @@ void Interface::deinitPrefetch() {
 }
 
 DecimaArchive* archiveFactory(const char* archiveFile) {
-	const char* ext = getFileExtension(archiveFile).c_str();
-	if (ext == "mpk") {
-		return new ArchiveMoviePack(archiveFile);
-	}
+        std::string ext = getFileExtension(archiveFile);
+        if (ext == "mpk") {
+                return new ArchiveMoviePack(archiveFile);
+        }
 
 	return new ArchiveBin(archiveFile);
 }
 
 void destroyArchive(DecimaArchive* archive, const char* archiveFile) {
-	const char* ext = getFileExtension(archiveFile).c_str();
-	if (ext == "mpk") {
-		return delete (ArchiveMoviePack*)archive;
-	}
+        std::string ext = getFileExtension(archiveFile);
+        if (ext == "mpk") {
+                return delete (ArchiveMoviePack*)archive;
+        }
 
 	return delete (ArchiveBin*)archive;
 }

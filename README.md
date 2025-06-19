@@ -31,8 +31,7 @@ There are two flavours of Decima Explorer, one that can be run from the command 
 
 ### GUI
 
-With the GUI version you can select the initial data directory of the game and it will populate a file list based on the game's cache prefetch. You can use the keyboard shortcut Ctrl+F to filter this list for the items you are interested in. You can select all the items with Ctrl+A or by Ctrl or shift clicking. With the items you wish to extract selected you can press the extract button and choose a directory in which to extract, when extracting multiple files with the GUI extraction will be multithreaded and should use all available cores. It is currently not possible to extract .mpk archives with the GUI.
-
+With the GUI version you can select the initial data directory of the game and it will populate a file list based on the games cache prefetch. You can use the keyboard shortcut Ctrl+F to filter this list for the items you are interested in. You can select all the items with Ctrl+A or by Ctrl or shift clicking. With the items you wish to extract selected you can press the extract button and choose a directory in which to extract, when extracting multiple files with the GUI extraction will be multithreaded and should use all available cores.
 
 There is also a separate GUI for packing and repacking files. I decided to separate this for now for a cleaner UX. When repacking you must first select a folder that contains the complete path for a file; this is because the directory is used when hashing. You can then select an output; if it is a bin file that already exists, it will attempt to repack that file. If it is a file that doesn't exist, it will pack the files into a new bin file.
 

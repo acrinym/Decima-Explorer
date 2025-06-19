@@ -37,9 +37,11 @@ private:
 	void saveStream(FILE* input, FILE* output, uint64_t size, uint32_t* key, uint64_t pass);
 	void extract(ArchiveMoviePackFileEntry fileEntry, std::string output);
 public:
-	ArchiveMoviePack(std::string filename);
-	~ArchiveMoviePack();
-	int open() override;
-	int extractFile(uint32_t id, std::string output);
-	int extractFile(std::string filename, std::string output, bool suppressError = 0);
+       ArchiveMoviePack(std::string filename);
+       ~ArchiveMoviePack();
+       int open() override;
+       int extractFile(uint32_t id, std::string output);
+       int extractFile(std::string filename, std::string output, bool suppressError = 0);
+       const std::vector<ArchiveMoviePackFileEntry>& getFileTable() { return fileTable; }
 };
+
