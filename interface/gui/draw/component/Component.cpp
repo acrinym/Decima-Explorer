@@ -43,7 +43,7 @@ Origin Component::getOrigin() {
 Dimensions Component::getDimensions() {
 	RECT rect;
 	GetWindowRect(handle, &rect);
-	return { (rect.top - rect.bottom), (rect.right - rect.left) };
+        return { rect.right - rect.left, rect.bottom - rect.top };
 }
 
 HBRUSH Component::createBrush(uint32_t rgb) {
