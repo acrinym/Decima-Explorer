@@ -1,4 +1,5 @@
 #include "GUI.h"
+#include <chrono>
 
 GUI::GUI(HINSTANCE hInst) {
 	HICON icon = fetchIcon(DEX_L_ICO, DEX_L_ICO_COMPRESSED_SIZE, DEX_L_ICO_UNCOMPRESSED_SIZE, 128, 128);
@@ -219,7 +220,9 @@ void GUI::saveDirectoryChosen(std::string directory) {
 		std::async(&GUI::repack, this, std::ref(selectedStrings), std::ref(directory), browseTextbox.getText()):
 		std::async(&GUI::pack,   this, std::ref(selectedStrings), browseTextbox.getText(), std::ref(directory));
 
-	while (!future._Is_ready()) checkQueue();
+        while (future.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) {
+                checkQueue();
+        }
 	enableElements();
 
 	deinitExtractProgress();

@@ -9,7 +9,7 @@
 #include "../decima/archive/mpk/ArchiveMoviePack.h"
 #include "../decima/archive/bin/initial/BinInitial.h"
 #include "../utils/Arrayutils.h"
-#include "../utils/NumUtils.h"
+#include "../utils/Numutils.h"
 #include "../utils/Msgutils.h"
 
 class Interface : public MessageHandler {

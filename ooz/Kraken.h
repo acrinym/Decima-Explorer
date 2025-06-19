@@ -10,7 +10,7 @@
 #include <string.h>
 #include <intrin.h>
 #include <assert.h>
-#include <Windows.h>
+#include <windows.h>
 
 #pragma warning (disable: 4244)
 

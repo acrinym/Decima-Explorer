@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <Windows.h>
+#include <cstdint>
+#include <windows.h>
 #include <stack>
 
 inline
