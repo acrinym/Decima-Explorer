@@ -79,10 +79,7 @@ std::vector<std::string> getFilesFromDirectory(const std::string& dirName, const
 
 inline
 bool hasPathSeparator(const std::string& path) {
-    if (path.size() < 2) return false;
-    std::string output = path.substr(path.size() - 1);
-    bool val = output == "\\";
-    return output == "\\";
+    return !path.empty() && (path.back() == '/' || path.back() == '\\');
 }
 
 inline
