@@ -1,5 +1,5 @@
 #pragma once
-#include "../component.h"
+#include "../Component.h"
 #include "../../../res/res.h"
 
 class WindowCaller {

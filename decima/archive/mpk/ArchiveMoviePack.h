@@ -22,7 +22,7 @@ private:
 	const uint64_t MAXSTREAM = 0x100000;
 	const std::string extension = ".mpk";
 	ArchiveMoviePackHeader header = { 0 };
-	std::vector<ArchiveMoviePackFileEntry> fileTable;
+       std::vector<ArchiveMoviePackFileEntry> fileTable;
 
 	uint32_t saltA[4] = { 0x833237C3, 0xBA5CD4B6, 0x3371A06B, 0xAEA7EDB2 };
 	uint32_t saltB[4] = { 0xCE857276, 0x9ACC40E8, 0x8242DBD6, 0xCF703987, };

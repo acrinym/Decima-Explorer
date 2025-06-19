@@ -28,3 +28,4 @@ public:
 	INT_PTR drawing(HDC deviceContext);
 	uint32_t getBackgroundColour();
 };
+
